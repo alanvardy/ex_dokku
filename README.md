@@ -11,7 +11,7 @@ ExDokku can be installed by adding `ex_dokku` to your list of dependencies in `m
 ```elixir
 def deps do
   [
-    {:ex_dokku, "~> 0.1.0"}
+    {:ex_dokku, "~> 0.1.0", only: :dev}
   ]
 end
 ```
