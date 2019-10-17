@@ -20,6 +20,10 @@ defmodule ExDokku.Config do
     Application.get_env(:ex_dokku, :repo) || raise ":repo not set"
   end
 
+  def backup_directory do
+    Application.get_env(:ex_dokku, :backup_directory) || raise ":backup_directory not set"
+  end
+
   @spec postgres_username :: String.t()
   def postgres_username do
     Application.get_env(:ex_dokku, :postgres_username) || raise ":postgres_username not set"

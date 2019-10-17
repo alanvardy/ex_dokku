@@ -32,4 +32,14 @@ defmodule ExDokku.Action do
 
     IO.puts("== Loaded #{name}.dump into development db ==")
   end
+
+  def save_db(name) do
+    System.cmd("pg_dump", [
+      "-Fc",
+      "--file=#{name}.dump",
+      Local.database_name()
+    ])
+
+    IO.puts("== Saved development db to #{name}.dump ==")
+  end
 end

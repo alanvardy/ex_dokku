@@ -1,5 +1,9 @@
 defmodule Mix.Tasks.Dokku.Pull do
-  @moduledoc "Download production database and load into development database"
+  @moduledoc """
+  Downloads your production database to your app root directory as `latest.dump`
+  and loads it into your development database. Useful for troubleshooting
+  production issues.
+"""
   @shortdoc "Download production database and load into development database"
 
   alias ExDokku.Action

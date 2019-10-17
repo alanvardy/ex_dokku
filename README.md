@@ -2,7 +2,14 @@
 
 Documentation can be found at [https://hexdocs.pm/ex_dokku](https://hexdocs.pm/ex_dokku).
 
-This library is currently being used with Dokku deployments on Digital Ocean
+This library assumes that you are:
+
+- Deploying with Dokku
+- Using Phoenix
+- Using Ecto and Postgres
+- Using a Digital Ocean style Dokku server setup
+
+I am testing this setup on Manjaro Linux.
 
 ## Installation
 
@@ -30,6 +37,18 @@ Add dump files to your .gitignore so you dont push private data to GitHub.
 
 ## Usage
 
+### mix dokku.save
+
+Saves your development database to your app root directory as `latest.dump`.
+
+### mix dokku.load
+
+Loads the `latest.dump` from the app root directory as your development database.
+
 ### mix dokku.pull
 
-Downloads your production database as `latest.dump` and loads it into your development database. Useful for troubleshooting production issues.
+Downloads your production database to your app root directory as `latest.dump` and loads it into your development database. Useful for troubleshooting production issues.
+
+### mix dokku.backup
+
+Downloads your production database to the path set in your config with the name of your app and the date. Re-downloading the file again will replace the previously downloaded file.
