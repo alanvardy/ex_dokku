@@ -23,6 +23,16 @@ def deps do
 end
 ```
 
+Add your configuration to `config/dev.exs`
+
+```elixir
+config :ex_dokku,
+  app: :your_app,
+  repo: YourApp.Repo,
+  postgres_username: "postgres",
+  backup_directory: "/"
+```
+
 Make sure that your server is added to your git remote, as this tool pulls the remote info from git.
 
 ```bash
