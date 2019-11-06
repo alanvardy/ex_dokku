@@ -2,17 +2,20 @@ defmodule ExDokku.Action do
   @moduledoc "Core actions for ExDokku"
   alias ExDokku.{Config, Local, Remote}
 
+  @spec start_ssh :: {:ok, [atom]}
   def start_ssh do
     {:ok, _started} = Application.ensure_all_started(:sshex)
   end
 
-  defp connect_ssh() do
+  @spec connect_ssh :: any
+  def connect_ssh do
     ip = Remote.server_ip()
 
     SSHEx.connect(ip: ip, user: "root")
     |> elem(1)
   end
 
+  @spec download_db(String.t()) :: :ok
   def download_db(name) do
     output =
       connect_ssh()
@@ -28,6 +31,7 @@ defmodule ExDokku.Action do
     end
   end
 
+  @spec load_db(String.t()) :: :ok
   def load_db(name) do
     System.cmd("pg_restore", [
       "-c",
@@ -39,6 +43,7 @@ defmodule ExDokku.Action do
     IO.puts("== Loaded #{name}.dump into development db ==")
   end
 
+  @spec save_db(String.t()) :: :ok
   def save_db(name) do
     System.cmd("pg_dump", [
       "-Fc",
@@ -49,35 +54,27 @@ defmodule ExDokku.Action do
     IO.puts("== Saved development db to #{name}.dump ==")
   end
 
-  def reset_prod_db do
-    app = Remote.app_name()
-    db = Remote.database_name()
+  @spec upload_db(String.t()) :: {<<>>, 0}
+  def upload_db(file) do
+    ip = Remote.server_ip()
+    directory = Config.backup_directory()
+    IO.puts("Uploading #{file} to #{ip}:/home/dokku/restore.dump")
+    {"", 0} = System.cmd("scp", [directory <> file, "root@#{ip}:/home/dokku/restore.dump"])
+  end
 
-    confirmation =
-      IO.gets("""
-      WARNING: THIS ACTION WILL ERASE YOUR PRODUCTION DATABASE
-      Make sure you have a backup with mix dokku.backup before continuing.
-      Type in #{db} to confirm
+  @spec choose_file :: String.t()
+  def choose_file do
+    {files, 0} = System.cmd("ls", [Config.backup_directory()])
 
-      """)
-      |> String.trim()
+    IO.gets("Please enter one of the following files from your backup directory:\n#{files}")
+    |> String.trim()
+  end
 
-    unless confirmation == db do
-      raise "Cancelled"
-    end
-
-    conn = connect_ssh()
-    IO.puts("Unlinking #{db} from #{app}")
-    {:ok, output, 0} = SSHEx.run(conn, 'dokku postgres:unlink #{db} #{app}', exec_timeout: 60_000)
+  @spec run_remote(any, charlist) :: any
+  def run_remote(conn, command) do
+    IO.puts("Running '#{command}' on server")
+    {:ok, output, 0} = SSHEx.run(conn, command, exec_timeout: 60_000)
     IO.puts(output)
-    IO.puts("Destroying #{db}")
-    {:ok, output, 0} = SSHEx.run(conn, 'dokku postgres:destroy #{db} -f', exec_timeout: 60_000)
-    IO.puts(output)
-    IO.puts("Creating #{db}")
-    {:ok, output, 0} = SSHEx.run(conn, 'dokku postgres:create #{db}', exec_timeout: 60_000)
-    IO.puts(output)
-    IO.puts("Linking #{db} to #{app}")
-    {:ok, output, 0} = SSHEx.run(conn, 'dokku postgres:link #{db} #{app}', exec_timeout: 60_000)
-    IO.puts(output)
+    conn
   end
 end
