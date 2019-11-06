@@ -12,14 +12,17 @@ defmodule ExDokku.Config do
   ```
   """
 
+  @spec app :: any
   def app do
     Application.get_env(:ex_dokku, :app) || raise ":app not set"
   end
 
+  @spec repo :: any
   def repo do
     Application.get_env(:ex_dokku, :repo) || raise ":repo not set"
   end
 
+  @spec backup_directory :: any
   def backup_directory do
     Application.get_env(:ex_dokku, :backup_directory) || raise ":backup_directory not set"
   end

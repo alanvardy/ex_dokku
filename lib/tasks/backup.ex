@@ -19,5 +19,7 @@ defmodule Mix.Tasks.Dokku.Backup do
 
     Action.start_ssh()
     Action.download_db("#{Config.backup_directory()}#{Config.app()}-#{date}")
+
+    IO.puts("Backup complete")
   end
 end

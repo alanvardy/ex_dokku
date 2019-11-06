@@ -18,7 +18,7 @@ ExDokku can be installed by adding `ex_dokku` to your list of dependencies in `m
 ```elixir
 def deps do
   [
-    {:ex_dokku, "~> 0.1.0", only: :dev}
+    {:ex_dokku, "~> 0.1.1", only: :dev}
   ]
 end
 ```
@@ -30,7 +30,7 @@ config :ex_dokku,
   app: :your_app,
   repo: YourApp.Repo,
   postgres_username: "postgres",
-  backup_directory: "/"
+  backup_directory: "/home/user/dbbackup/"
 ```
 
 Make sure that your server is added to your git remote, as this tool pulls the remote info from git.
@@ -62,3 +62,15 @@ Downloads your production database to your app root directory as `latest.dump` a
 ### mix dokku.backup
 
 Downloads your production database to the path set in your config with the name of your app and the date. Re-downloading the file again will replace the previously downloaded file.
+
+### mix dokku.reset_prod
+
+**This is a dangerous command**
+
+Unlinks, destroys, recreates, and then relinks your production database. Confirms beforehand. Make sure you back up your database before issuing this command!
+
+### mix dokku.restore_prod
+
+**This is a dangerous command**
+
+Unlinks, destroys, recreates, relinks and then restores your production database from a selected backup on your local machine. Confirms beforehand. Make sure you back up your database before issuing this command!

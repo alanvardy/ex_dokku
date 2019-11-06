@@ -11,15 +11,19 @@ defmodule ExDokku.Remote do
     |> Map.get("ip")
   end
 
-  defp app_name do
+  def app_name do
     git_info()
     |> Map.get("app")
   end
 
   defp git_info do
-    {result, 0} = System.cmd("git", ["remote", "get-url", "dokku"], stderr_to_stdout: true)
+    case System.cmd("git", ["remote", "get-url", "dokku"], stderr_to_stdout: true) do
+      {result, 0} ->
+        ~r/dokku@(?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}):(?<app>\w+)\n/
+        |> Regex.named_captures(result)
 
-    ~r/dokku@(?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}):(?<app>\w+)\n/
-    |> Regex.named_captures(result)
+      _ ->
+        raise "Please add your git remote with: git remote add dokku dokku@your.server.ip.address:yourapp"
+    end
   end
 end
