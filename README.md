@@ -33,13 +33,14 @@ config :ex_dokku,
   backup_directory: "/"
 ```
 
-Make sure that your server is added to your git remote, as this tool pulls the remote info from git.
+Make sure that your server is added to your git remote, as this tool pulls the remote info from git. Add your staging app too if applicable. Note that the remote must be named `dokku` for production and `dokku-staging` for staging.
 
 ```bash
-git remote add dokku dokku@123.456.789.123:yourapp
+git remote add dokku dokku@123.456.789.123:yourproductionapp
+git remote add dokku-staging dokku@123.456.789.123:yourstagingapp
 ```
 
-Add dump files to your .gitignore so you dont push private data to GitHub.
+Add dump files to your .gitignore so you dont push private data to GitHub. This is kind of important.
 
 ```bash
 *.dump
@@ -62,6 +63,16 @@ Downloads your production database to your app root directory as `latest.dump` a
 ### mix dokku.backup
 
 Downloads your production database to the path set in your config with the name of your app and the date. Re-downloading the file again will replace the previously downloaded file.
+
+### mix dokku.deploy_prod
+
+**This is a kinda dangerous command**
+
+This pushes master to production. You can totally do this yourself with `git push dokku master`. That's cool too.
+
+### mix dokku.deploy_stag
+
+This pushes develop to staging.
 
 ### mix dokku.reset_prod
 
