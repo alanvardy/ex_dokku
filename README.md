@@ -30,7 +30,7 @@ config :ex_dokku,
   app: :your_app,
   repo: YourApp.Repo,
   postgres_username: "postgres",
-  backup_directory: "/"
+  backup_directory: "/home/user/dbbackup/"
 ```
 
 Make sure that your server is added to your git remote, as this tool pulls the remote info from git. Add your staging app too if applicable. Note that the remote must be named `dokku` for production and `dokku-staging` for staging.
@@ -79,3 +79,9 @@ This pushes develop to staging.
 **This is a dangerous command**
 
 Unlinks, destroys, recreates, and then relinks your production database. Confirms beforehand. Make sure you back up your database before issuing this command!
+
+### mix dokku.restore_prod
+
+**This is a dangerous command**
+
+Unlinks, destroys, recreates, relinks and then restores your production database from a selected backup on your local machine. Confirms beforehand. Make sure you back up your database before issuing this command!

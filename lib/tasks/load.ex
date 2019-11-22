@@ -9,5 +9,7 @@ defmodule Mix.Tasks.Dokku.Load do
   def run(_args) do
     Action.start_ssh()
     Action.load_db("latest")
+
+    IO.puts("Load complete")
   end
 end
