@@ -2,7 +2,7 @@ defmodule ExDokku.MixProject do
   @moduledoc false
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
 
   def project do
     [
@@ -58,6 +58,7 @@ defmodule ExDokku.MixProject do
   defp deps do
     [
       {:sshex, "2.2.1"},
+      {:observer_cli, "~> 1.5"},
       # Tooling
       {:ex_check, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},

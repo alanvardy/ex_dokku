@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.1.2 (2019-11-23)
+
+* Add staging methods
+* Add observer_cli
+* More error messaging
+* Grab all config variables in one pass
+* Blow everything up and change the whole public interface :)
+
 ## v0.1.1 (2019-11-05)
 
 * Add mix dokku.reset_prod

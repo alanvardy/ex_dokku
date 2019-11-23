@@ -13,12 +13,13 @@ I am testing this setup on Manjaro Linux.
 
 ## Installation
 
-ExDokku can be installed by adding `ex_dokku` to your list of dependencies in `mix.exs`:
+ExDokku can be installed by adding `ex_dokku` and `observer_cli` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:ex_dokku, "~> 0.1.1", only: :dev}
+    {:ex_dokku, "~> 0.1.2", only: :dev},
+    {:observer_cli, "~> 1.5"}
   ]
 end
 ```
@@ -48,39 +49,49 @@ Add dump files to your .gitignore so you dont push private data to GitHub. This 
 
 ## Usage
 
-### mix dokku.save
+### Local
+
+####  mix dokku.local.save
 
 Saves your development database to your app root directory as `latest.dump`.
 
-### mix dokku.load
+#### mix dokku.local.load
 
 Loads the `latest.dump` from the app root directory as your development database.
 
-### mix dokku.pull
+### Staging
 
-Downloads your production database to your app root directory as `latest.dump` and loads it into your development database. Useful for troubleshooting production issues.
-
-### mix dokku.backup
-
-Downloads your production database to the path set in your config with the name of your app and the date. Re-downloading the file again will replace the previously downloaded file.
-
-### mix dokku.deploy_prod
-
-**This is a kinda dangerous command**
-
-This pushes master to production. You can totally do this yourself with `git push dokku master`. That's cool too.
-
-### mix dokku.deploy_stag
+#### mix dokku.stag.deploy
 
 This pushes develop to staging.
 
-### mix dokku.reset_prod
+#### mix dokku.stag.restore
+
+This pulls the production database as latest.dump, uploads it to the staging server and loads it into the staging database.
+
+### Production
+
+#### mix dokku.prod.pull
+
+Downloads your production database to your app root directory as `latest.dump` and loads it into your development database. Useful for troubleshooting production issues.
+
+#### mix dokku.prod.backup
+
+Downloads your production database to the path set in your config with the name of your app and the date. Re-downloading the file again will replace the previously downloaded file.
+
+#### mix dokku.prod.deploy
+
+**This is a _kinda_ dangerous command**
+
+This pushes master to production. You can totally do this yourself with `git push dokku master`. That's cool too.
+
+#### mix dokku.prod.reset
 
 **This is a dangerous command**
 
 Unlinks, destroys, recreates, and then relinks your production database. Confirms beforehand. Make sure you back up your database before issuing this command!
 
-### mix dokku.restore_prod
+#### mix dokku.prod.restore
 
 **This is a dangerous command**
 
