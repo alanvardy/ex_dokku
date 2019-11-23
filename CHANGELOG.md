@@ -6,6 +6,7 @@
 * Add observer_cli
 * More error messaging
 * Grab all config variables in one pass
+* Add some more docs
 * Blow everything up and change the whole public interface :)
 
 ## v0.1.1 (2019-11-05)
