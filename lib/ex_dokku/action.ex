@@ -1,70 +1,73 @@
 defmodule ExDokku.Action do
   @moduledoc "Core actions for ExDokku"
-  alias ExDokku.{Config, Local, Remote}
+  alias ExDokku.{Struct}
 
   @spec start_ssh :: {:ok, [atom]}
   def start_ssh do
     {:ok, _started} = Application.ensure_all_started(:sshex)
   end
 
-  @spec connect_ssh :: any
-  def connect_ssh do
-    ip = Remote.server_ip()
-
-    SSHEx.connect(ip: ip, user: "root")
-    |> elem(1)
+  @spec connect_ssh(String.t()) :: any
+  def connect_ssh(ip) do
+    case SSHEx.connect(ip: ip, user: "root") do
+      {:ok, pid} -> pid
+      {:error, message} -> "Could not connect to #{ip}, message: #{message}"
+    end
   end
 
-  @spec download_db(String.t()) :: :ok
-  def download_db(name) do
+  @spec download_db(Struct.t(), String.t()) :: :ok
+  def download_db(%{ip_prod: ip_prod, db_prod: db_prod}, name) do
     output =
-      connect_ssh()
-      |> SSHEx.run('dokku postgres:export #{Remote.database_name()}')
+      connect_ssh(ip_prod)
+      |> SSHEx.run('dokku postgres:export #{db_prod}')
 
     case output do
       {:ok, output, 0} ->
         File.write("#{name}.dump", output, [])
         IO.puts("== Database downloaded as #{name}.dump ==")
 
-      _ ->
-        IO.puts("!! Unable to connect to database !!")
+      {:error, message} ->
+        IO.puts("Unable to download database: #{message}")
     end
   end
 
-  @spec load_db(String.t()) :: :ok
-  def load_db(name) do
+  @spec load_db(Struct.t(), String.t()) :: :ok
+  def load_db(%{postgres_username: postgres_username, database_name: database_name}, name) do
     System.cmd("pg_restore", [
       "-c",
-      "--username=#{Config.postgres_username()}",
-      "--dbname=#{Local.database_name()}",
+      "--username=#{postgres_username}",
+      "--dbname=#{database_name}",
       "#{name}.dump"
     ])
 
     IO.puts("== Loaded #{name}.dump into development db ==")
   end
 
-  @spec save_db(String.t()) :: :ok
-  def save_db(name) do
+  @spec save_db(Struct.t(), String.t()) :: :ok
+  def save_db(%{database_name: database_name}, name) do
     System.cmd("pg_dump", [
       "-Fc",
       "--file=#{name}.dump",
-      Local.database_name()
+      database_name
     ])
 
     IO.puts("== Saved development db to #{name}.dump ==")
   end
 
-  @spec upload_db(String.t()) :: {<<>>, 0}
-  def upload_db(file) do
-    ip = Remote.server_ip()
-    directory = Config.backup_directory()
+  @spec upload_db(String.t(), Struct.t(), String.t(), :backup | :local) :: {<<>>, 0}
+  def upload_db(file, %{backup_directory: backup_directory}, ip, :backup) do
     IO.puts("Uploading #{file} to #{ip}:/home/dokku/restore.dump")
-    {"", 0} = System.cmd("scp", [directory <> file, "root@#{ip}:/home/dokku/restore.dump"])
+    {"", 0} = System.cmd("scp", [backup_directory <> file, "root@#{ip}:/home/dokku/restore.dump"])
   end
 
-  @spec choose_file :: String.t()
-  def choose_file do
-    {files, 0} = System.cmd("ls", [Config.backup_directory()])
+  def upload_db(file, _config, ip, :local) do
+    IO.puts("Uploading #{file} to #{ip}:/home/dokku/restore.dump")
+    {"", 0} = System.cmd("scp", [file, "root@#{ip}:/home/dokku/restore.dump"])
+  end
+
+  @spec choose_file(Struct.t()) :: String.t()
+  def choose_file(%{backup_directory: backup_directory}) do
+    {files, 0} = System.cmd("ls", [backup_directory])
 
     IO.gets("Please enter one of the following files from your backup directory:\n#{files}")
     |> String.trim()
@@ -73,8 +76,12 @@ defmodule ExDokku.Action do
   @spec run_remote(any, charlist) :: any
   def run_remote(conn, command) do
     IO.puts("Running '#{command}' on server")
-    {:ok, output, 0} = SSHEx.run(conn, command, exec_timeout: 60_000)
-    IO.puts(output)
+
+    case SSHEx.run(conn, command, exec_timeout: 60_000) do
+      {:ok, output, 0} -> IO.puts(output)
+      {:error, message} -> IO.puts("Error running command: #{message}")
+    end
+
     conn
   end
 end
