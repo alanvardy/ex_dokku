@@ -1,5 +1,7 @@
 # ExDokku
 
+Quality of life tools for working with Dokku. One liners for working with databases in development, staging, and production. 
+
 Documentation can be found at [https://hexdocs.pm/ex_dokku](https://hexdocs.pm/ex_dokku).
 
 This library assumes that you are:
@@ -9,7 +11,7 @@ This library assumes that you are:
 - Using Ecto and Postgres
 - Using a Digital Ocean style Dokku server setup
 
-I am testing this setup on Manjaro Linux.
+I am testing this setup on Manjaro Linux. I am neither a member of, nor affiliated with the Dokku team. Use this library at your own risk.
 
 ## Installation
 
@@ -61,6 +63,10 @@ Loads the `latest.dump` from the app root directory as your development database
 
 ### Staging
 
+#### mix dokku.stag.obs
+
+Pulls up instructions for running observer_cli in staging (sorry, I am unable to just boot it myself)
+
 #### mix dokku.stag.deploy
 
 This pushes develop to staging.
@@ -70,6 +76,10 @@ This pushes develop to staging.
 This pulls the production database as latest.dump, uploads it to the staging server and loads it into the staging database.
 
 ### Production
+
+#### mix dokku.prod.obs
+
+Pulls up instructions for running observer_cli in staging
 
 #### mix dokku.prod.pull
 
