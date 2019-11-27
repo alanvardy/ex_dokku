@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Dokku.Prod.Obs do
+  @moduledoc "Run observer_cli on production"
   @shortdoc "Run observer_cli on production"
   use Mix.Task
   alias ExDokku.{Action, Config}

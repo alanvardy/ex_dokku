@@ -40,7 +40,7 @@ defmodule ExDokku.Config.Remote do
 
     case System.cmd("git", ["remote", "get-url", remote], stderr_to_stdout: true) do
       {result, 0} ->
-        ~r/dokku@(?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}):(?<app>\w+)\n/
+        ~r/dokku@(?<ip>\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}):(?<app>.+)\n/
         |> Regex.named_captures(result)
 
       _ ->

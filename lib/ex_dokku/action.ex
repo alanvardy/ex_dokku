@@ -1,6 +1,6 @@
 defmodule ExDokku.Action do
   @moduledoc "Core actions for ExDokku"
-  alias ExDokku.{Struct}
+  alias ExDokku.Config.Struct
 
   @spec start_ssh :: {:ok, [atom]}
   def start_ssh do

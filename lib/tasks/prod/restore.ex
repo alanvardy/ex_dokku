@@ -1,6 +1,4 @@
 defmodule Mix.Tasks.Dokku.Prod.Restore do
-  alias ExDokku.Remote
-
   @moduledoc """
   **This is a dangerous command**
 
