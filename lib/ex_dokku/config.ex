@@ -1,4 +1,5 @@
 defmodule ExDokku.Config do
+  @moduledoc "Builds the configuration struct"
   alias ExDokku.Config.{Application, Local, Remote, Struct}
 
   def build do

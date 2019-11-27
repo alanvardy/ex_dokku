@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Dokku.Prod.Deploy do
+  @moduledoc "Deploy app to production"
   @shortdoc "Deploy app to production"
   use Mix.Task
 

@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Dokku.Stag.Obs do
+  @moduledoc "Run observer_cli on staging"
   @shortdoc "Run observer_cli on staging"
   use Mix.Task
   alias ExDokku.{Action, Config}
