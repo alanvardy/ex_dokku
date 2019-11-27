@@ -1,6 +1,5 @@
 defmodule ExDokku.Config.Local do
   @moduledoc "Interacts with the development environment"
-  alias ExDokku.Config
 
   def add(struct) do
     struct

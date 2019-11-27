@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.3 (2019-11-23)
+
+* More inclusive regex for app names
+
 ## v0.1.2 (2019-11-23)
 
 * Add staging methods
