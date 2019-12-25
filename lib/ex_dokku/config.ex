@@ -3,6 +3,8 @@ defmodule ExDokku.Config do
   alias ExDokku.Config.{Application, Local, Remote, Struct}
 
   def build do
+    IO.puts("== Loading Config ==")
+
     %Struct{}
     |> Application.add()
     |> Local.add()

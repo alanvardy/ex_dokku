@@ -20,7 +20,7 @@ ExDokku can be installed by adding `ex_dokku` and `observer_cli` to your list of
 ```elixir
 def deps do
   [
-    {:ex_dokku, "~> 0.1.3", only: :dev},
+    {:ex_dokku, "~> 0.1.4", only: :dev},
     {:observer_cli, "~> 1.5"}
   ]
 end
@@ -61,6 +61,8 @@ Saves your development database to your app root directory as `latest.dump`.
 
 Loads the `latest.dump` from the app root directory as your development database.
 
+Note that this command just loads the data, it does not restore the schema. You may need to create and migrate your database before running this command.
+
 ### Staging
 
 #### mix dokku.stag.obs
@@ -84,6 +86,8 @@ Pulls up instructions for running observer_cli in staging
 #### mix dokku.prod.pull
 
 Downloads your production database to your app root directory as `latest.dump` and loads it into your development database. Useful for troubleshooting production issues.
+
+See above load command.
 
 #### mix dokku.prod.backup
 

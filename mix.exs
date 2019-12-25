@@ -2,7 +2,7 @@ defmodule ExDokku.MixProject do
   @moduledoc false
   use Mix.Project
 
-  @version "0.1.3"
+  @version "0.1.5"
 
   def project do
     [
