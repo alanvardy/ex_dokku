@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.4 (2019-12-25)
+## v0.1.5 (2019-12-25)
 
 * Disable triggers on database restore
 * Add loading config message
