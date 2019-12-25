@@ -2,7 +2,8 @@
 
 ## v0.1.4 (2019-12-25)
 
-* Disable triggers on database restore.
+* Disable triggers on database restore
+* Add loading config message
 
 ## v0.1.3 (2019-11-23)
 
