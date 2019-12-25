@@ -20,7 +20,7 @@ ExDokku can be installed by adding `ex_dokku` and `observer_cli` to your list of
 ```elixir
 def deps do
   [
-    {:ex_dokku, "~> 0.1.3", only: :dev},
+    {:ex_dokku, "~> 0.1.4", only: :dev},
     {:observer_cli, "~> 1.5"}
   ]
 end
