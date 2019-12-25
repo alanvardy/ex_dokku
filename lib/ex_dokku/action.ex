@@ -35,6 +35,7 @@ defmodule ExDokku.Action do
   def load_db(%{postgres_username: postgres_username, database_name: database_name}, name) do
     System.cmd("pg_restore", [
       "-c",
+      "--disable-triggers",
       "--username=#{postgres_username}",
       "--dbname=#{database_name}",
       "#{name}.dump"
