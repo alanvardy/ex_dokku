@@ -33,6 +33,10 @@ defmodule ExDokku.Action do
 
   @spec load_db(Struct.t(), String.t()) :: :ok
   def load_db(%{postgres_username: postgres_username, database_name: database_name}, name) do
+    IO.puts("== Dropping development db ==")
+    System.cmd("mix", ["ecto.drop"])
+    IO.puts("== Creating development db ==")
+    System.cmd("mix", ["ecto.create"])
     System.cmd("pg_restore", [
       "-c",
       "--disable-triggers",
