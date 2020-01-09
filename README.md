@@ -59,9 +59,7 @@ Saves your development database to your app root directory as `latest.dump`.
 
 #### mix dokku.local.load
 
-Loads the `latest.dump` from the app root directory as your development database.
-
-Note that this command just loads the data, it does not restore the schema. You may need to create and migrate your database before running this command.
+Loads the `latest.dump` from the app root directory as your development database. Migrates afterwards
 
 ### Staging
 
