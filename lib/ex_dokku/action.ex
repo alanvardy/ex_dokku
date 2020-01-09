@@ -37,13 +37,17 @@ defmodule ExDokku.Action do
     System.cmd("mix", ["ecto.drop"])
     IO.puts("== Creating development db ==")
     System.cmd("mix", ["ecto.create"])
+
     System.cmd("pg_restore", [
-      "-c",
-      "--disable-triggers",
+      "--no-acl",
+      "--clean",
+      "--if-exists",
       "--username=#{postgres_username}",
       "--dbname=#{database_name}",
       "#{name}.dump"
     ])
+
+    System.cmd("mix", ["ecto.migrate"])
 
     IO.puts("== Loaded #{name}.dump into development db ==")
   end

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.7 (2020-01-02)
+
+* Additional flags and migration after create for loading database
+
 ## v0.1.6 (2020-01-02)
 
 * Drop and recreate development database before loading dump
