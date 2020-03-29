@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.8 (2020-03-29)
+
+* Increase the verbosity of loading messages
+* Specify localhost on pg_restore
+
 ## v0.1.7 (2020-01-02)
 
 * Additional flags and migration after create for loading database

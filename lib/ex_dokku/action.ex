@@ -34,20 +34,30 @@ defmodule ExDokku.Action do
   @spec load_db(Struct.t(), String.t()) :: :ok
   def load_db(%{postgres_username: postgres_username, database_name: database_name}, name) do
     IO.puts("== Dropping development db ==")
-    System.cmd("mix", ["ecto.drop"])
+    {message, _code} = System.cmd("mix", ["ecto.drop"])
+    IO.puts(message)
     IO.puts("== Creating development db ==")
-    System.cmd("mix", ["ecto.create"])
+    {message, _code} = System.cmd("mix", ["ecto.create"])
+    IO.puts(message)
 
-    System.cmd("pg_restore", [
-      "--no-acl",
-      "--clean",
-      "--if-exists",
-      "--username=#{postgres_username}",
-      "--dbname=#{database_name}",
-      "#{name}.dump"
-    ])
+    IO.puts("== Restoring development db ==")
 
-    System.cmd("mix", ["ecto.migrate"])
+    {message, _code} =
+      System.cmd("pg_restore", [
+        "--no-acl",
+        "--clean",
+        "--if-exists",
+        "--host=localhost",
+        "--username=#{postgres_username}",
+        "--dbname=#{database_name}",
+        "#{name}.dump"
+      ])
+
+    IO.puts(message)
+
+    IO.puts("== Migrating development db ==")
+    {message, _code} = System.cmd("mix", ["ecto.migrate"])
+    IO.puts(message)
 
     IO.puts("== Loaded #{name}.dump into development db ==")
   end
